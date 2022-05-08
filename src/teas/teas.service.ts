@@ -28,21 +28,25 @@ export class TeasService {
     return tea;
   }
 
-  create(createCoffeeDto: any) {
-    this.tea.push(createCoffeeDto);
+  create(createTeaDto: any) {
+    this.tea.push(createTeaDto);
   }
 
-  update(id: string, updateCoffeeDto: any) {
-    const existingCoffee = this.findOne(id);
-    if (existingCoffee) {
+  update(id: string, updateTeaDto: any) {
+    const existingTea = this.findOne(id);
+    if (existingTea) {
       // update the existing entity
     }
   }
 
   remove(id: string) {
-    const coffeeIndex = this.tea.findIndex((item) => item.id === +id);
-    if (coffeeIndex >= 0) {
-      this.tea.splice(coffeeIndex, 1);
+    const teaIndex = this.tea.findIndex((item) => item.id === +id);
+    if (teaIndex >= 0) {
+      this.tea.splice(teaIndex, 1);
+    }
+    //send error when use try to reach id doesn't exist
+    if (!teaIndex) {
+      throw new NotFoundException(`Tea with the id #${id} not found`);
     }
   }
 }

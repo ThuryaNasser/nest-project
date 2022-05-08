@@ -8,6 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { CreateTeaDto } from './dto/create-tea.dto';
+import { UpdateTeaDto } from './dto/update-tea.dto';
 import { TeasService } from './teas.service';
 
 @Controller('teas')
@@ -66,8 +68,8 @@ export class TeasController {
 
   //http://localhost:3000/teas
   @Post()
-  create(@Body() body) {
-    return this.teasService.create(body);
+  create(@Body() createTeaDto: CreateTeaDto) {
+    return this.teasService.create(createTeaDto);
   }
 
   //to access specific value from the body
@@ -90,14 +92,14 @@ export class TeasController {
   @Patch(':id')
   // update(@Param('id') id: string "too indicated what entity to update",
   //@Body() body "the updating it self === the new values " )
-  update(@Param('id') id: string, @Body() body) {
-    return this.teasService.update(id, body);
+  update(@Param('id') id: string, @Body() updateTeaDto: UpdateTeaDto) {
+    return this.teasService.update(id, updateTeaDto);
   }
 
   /*
-  ####################
-  ## PUT , Patch ##
-  ####################
+  ############
+  ## Delete ##
+  ############
   */
 
   //http://localhost:3000/teas/255(any number here)
