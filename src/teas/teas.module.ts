@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Tea } from './entities/tea.entity';
 import { TeasController } from './teas.controller';
 import { TeasService } from './teas.service';
 /**
@@ -14,5 +16,9 @@ import { TeasService } from './teas.service';
  providers === services ,
 */
 
-@Module({ controllers: [TeasController], providers: [TeasService] })
+@Module({
+  imports: [TypeOrmModule.forFeature([Tea])], // 👈 Adding Tea Entity here to TypeOrmModule.forFeature
+  controllers: [TeasController],
+  providers: [TeasService],
+})
 export class TeasModule {}

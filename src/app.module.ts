@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TeasModule } from './teas/teas.module';
@@ -10,10 +11,11 @@ import { TeasModule } from './teas/teas.module';
     TypeOrmModule.forRoot({
       type: 'postgres', // type of our database
       host: 'localhost', // database host
-      port: 5432, // database host
+      port: 35432, // database host
       username: 'postgres', // username
       password: 'postgres', // user password
-      database: 'ilovetea', // name of our database,
+      database: 'postgres', // name of our database,
+      // entities: [join(__dirname, '/**/*.entity{.ts,.js}')],
       autoLoadEntities: true, // models will be loaded automatically
       synchronize: true, // your entities will be synced with the database(recommended: disable in production)
     }),

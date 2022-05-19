@@ -11,6 +11,6 @@ async function bootstrap() {
       transform: true, // Enabling auto transform feature of ValidationPipe
     }),
   );
-  await app.listen(3000);
+  await app.listen(3004);
 }
 bootstrap();
