@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Tea } from './entities/tea.entity';
+import { Flavor } from './entities/tea.flavor.entity';
 import { TeasController } from './teas.controller';
 import { TeasService } from './teas.service';
 /**
@@ -17,7 +18,7 @@ import { TeasService } from './teas.service';
 */
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tea])], // 👈 Adding Tea Entity here to TypeOrmModule.forFeature
+  imports: [TypeOrmModule.forFeature([Tea, Flavor])], // 👈 Adding Tea Entity here to TypeOrmModule.forFeature
   controllers: [TeasController],
   providers: [TeasService],
 })
