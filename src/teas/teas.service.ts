@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
-import { DataSource, Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { CreateTeaDto } from './dto/create-tea.dto';
 import { UpdateTeaDto } from './dto/update-tea.dto';
 import { Tea } from './entities/tea.entity';
@@ -16,7 +16,7 @@ export class TeasService {
     private readonly teaRepository: Repository<Tea>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
-    private readonly dataSource: DataSource,
+    private readonly entityManager: EntityManager,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -98,7 +98,7 @@ export class TeasService {
   }
 
   async recommendedTea(tea: Tea) {
-    const queryRunner = this.dataSource.createQueryRunner();
+    const queryRunner = this.entityManager.connection.createQueryRunner();
 
     //connect to the data base
     await queryRunner.connect();

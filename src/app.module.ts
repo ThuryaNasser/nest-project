@@ -15,9 +15,9 @@ import { TeasModule } from './teas/teas.module';
       username: 'postgres', // username
       password: 'postgres', // user password
       database: 'postgres', // name of our database,
-      // entities: [join(__dirname, '/**/*.entity{.ts,.js}')],
+      entities: [join(__dirname, '/**/*.entity{.ts,.js}')],
       autoLoadEntities: true, // models will be loaded automatically
-      synchronize: true, // your entities will be synced with the database(recommended: disable in production)
+      // synchronize: true, // your entities will be synced with the database(recommended: disable in production)
     }),
   ],
   controllers: [AppController],
