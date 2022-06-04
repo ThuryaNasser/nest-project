@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateTeaDto } from './dto/create-tea.dto';
 import { UpdateTeaDto } from './dto/update-tea.dto';
 import { Tea } from './entities/tea.entity';
+import { Flavor } from './entities/tea.flavor.entity';
 
 @Injectable()
 //REMEMBER: each service is considered as provider
@@ -11,6 +12,8 @@ export class TeasService {
   constructor(
     @InjectRepository(Tea)
     private readonly teaRepository: Repository<Tea>,
+    @InjectRepository(Flavor)
+    private readonly flavorRepository: Repository<Flavor>,
   ) {}
 
   findAll() {
@@ -37,16 +40,32 @@ export class TeasService {
     return tea;
   }
 
-  create(createTeaDto: CreateTeaDto) {
-    const tea = this.teaRepository.create(createTeaDto);
+  async create(createTeaDto: CreateTeaDto) {
+    //loop through all the flavors in createTeaDto and call the preloadFlavorByName() to make sure they exist
+    const flavors = await Promise.all(
+      createTeaDto.flavors.map((name) => this.preloadFlavorByName(name)),
+    );
+
+    const tea = this.teaRepository.create({
+      ...createTeaDto,
+      flavors,
+    });
     return this.teaRepository.save(tea);
   }
 
   async update(id: string, updateTeaDto: UpdateTeaDto) {
+    const flavors =
+      updateTeaDto.flavors &&
+      (await Promise.all(
+        updateTeaDto.flavors.map((name) => this.preloadFlavorByName(name)),
+      ));
+
     const existingTea = await this.teaRepository.preload({
       id: +id,
       ...updateTeaDto,
+      flavors,
     });
+
     if (!existingTea) {
       throw new NotFoundException(`Tea with the id #${id} not found`);
     }
@@ -60,5 +79,15 @@ export class TeasService {
       },
     });
     return this.teaRepository.remove(teaIndex);
+  }
+
+  private async preloadFlavorByName(name: string): Promise<Flavor> {
+    const existingFlavor = await this.flavorRepository.findOne({
+      where: { name },
+    });
+    if (existingFlavor) {
+      return existingFlavor;
+    }
+    return this.flavorRepository.create({ name });
   }
 }

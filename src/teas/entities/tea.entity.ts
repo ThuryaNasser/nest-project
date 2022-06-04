@@ -44,8 +44,12 @@ export class Tea {
   @ManyToMany(
     () => Flavor, //to specify what is the type of the relation
     (flavor) => flavor.teas, // what is "teas" within the Flavor Entity
+    {
+      // to enable cascading for both inserts and updates
+      cascade: true, // or optionally just insert or update => cascade: ['insert']
+    },
   ) // 👈
-  flavors: string[];
+  flavors: Flavor[];
 }
 
 /*
