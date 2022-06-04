@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { Repository } from 'typeorm';
+import { Event } from 'src/events/entities/event.entity';
+import { DataSource, Repository } from 'typeorm';
 import { CreateTeaDto } from './dto/create-tea.dto';
 import { UpdateTeaDto } from './dto/update-tea.dto';
 import { Tea } from './entities/tea.entity';
@@ -15,6 +16,7 @@ export class TeasService {
     private readonly teaRepository: Repository<Tea>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
+    private readonly dataSource: DataSource,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -93,5 +95,36 @@ export class TeasService {
       return existingFlavor;
     }
     return this.flavorRepository.create({ name });
+  }
+
+  async recommendedTea(tea: Tea) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    //connect to the data base
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      //increase the recommendation
+      tea.recommendations++;
+
+      //creat new event
+      const recommendEvent = new Event();
+      recommendEvent.name = 'recommend_tea';
+      recommendEvent.type = 'tea';
+      recommendEvent.payload = { teaId: tea.id };
+
+      //save the tea and event entity
+      await queryRunner.manager.save(tea);
+      await queryRunner.manager.save(recommendEvent);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      //incase any error, roll back the entire transaction
+      await queryRunner.rollbackTransaction();
+    } finally {
+      //ether fall or success, at the end we need to close the connection with the DB
+      await queryRunner.release();
+    }
   }
 }

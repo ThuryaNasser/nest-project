@@ -40,6 +40,9 @@ export class Tea {
   @Column()
   brand: string;
 
+  @Column({ default: 0 })
+  recommendations: number;
+
   @JoinTable() // to Join the 2 tables - only the OWNER-side does this
   @ManyToMany(
     () => Flavor, //to specify what is the type of the relation

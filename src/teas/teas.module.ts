@@ -4,6 +4,7 @@ import { Tea } from './entities/tea.entity';
 import { Flavor } from './entities/tea.flavor.entity';
 import { TeasController } from './teas.controller';
 import { TeasService } from './teas.service';
+import { Event } from '../events/entities/event.entity';
 /**
  Module contain 4 main things :
  1- controllers === api rout that this module instantiate 
@@ -18,7 +19,7 @@ import { TeasService } from './teas.service';
 */
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Tea, Flavor])], // 👈 Adding Tea Entity here to TypeOrmModule.forFeature
+  imports: [TypeOrmModule.forFeature([Tea, Flavor, Event])], // 👈 Adding Tea Entity here to TypeOrmModule.forFeature
   controllers: [TeasController],
   providers: [TeasService],
 })
