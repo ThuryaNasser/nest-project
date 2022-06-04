@@ -8,6 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { CreateTeaDto } from './dto/create-tea.dto';
 import { UpdateTeaDto } from './dto/update-tea.dto';
 import { TeasService } from './teas.service';
@@ -37,9 +38,8 @@ export class TeasController {
   //or
   //http://localhost:3004/teas?limit=10&offset=100
   @Get()
-  findAll(@Query() paginationQuery) {
-    // const { limit, offset } = paginationQuery;
-    return this.teasService.findAll();
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    return this.teasService.findAll(paginationQuery);
   }
 
   //http://localhost:3004/teas/flavors

@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Repository } from 'typeorm';
 import { CreateTeaDto } from './dto/create-tea.dto';
 import { UpdateTeaDto } from './dto/update-tea.dto';
@@ -16,11 +17,14 @@ export class TeasService {
     private readonly flavorRepository: Repository<Flavor>,
   ) {}
 
-  findAll() {
+  findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
     return this.teaRepository.find({
       /*relations: relations needs to be loaded with the main entity.
        Sub-relations can also be loaded (shorthand for join and leftJoinAndSelect) */
       relations: { flavors: true },
+      take: limit, // for testing http://localhost:3004/teas?limit=1 => return only the first one
+      skip: offset, //for testing http://localhost:3004/teas?offset=1=> return all except the first one
     });
   }
 
