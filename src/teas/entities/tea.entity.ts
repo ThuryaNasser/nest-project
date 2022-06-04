@@ -25,6 +25,8 @@ import { Flavor } from './tea.flavor.entity';
       in the foreign table, and every record in the foreign table has many related rows in the primary table.
       In TypeOrm, we define these types of relations with the  @ManyToMany() decorator.
 
+ - RELATIONS ARE NOT EAGERLY LOADED BY DEFAULT
+
  */
 
 @Entity() // sql table === 'tea'
@@ -41,7 +43,7 @@ export class Tea {
   @JoinTable() // to Join the 2 tables - only the OWNER-side does this
   @ManyToMany(
     () => Flavor, //to specify what is the type of the relation
-    (flavor) => flavor.teas, // what is "coffee" within the Flavor Entity
+    (flavor) => flavor.teas, // what is "teas" within the Flavor Entity
   ) // 👈
   flavors: string[];
 }

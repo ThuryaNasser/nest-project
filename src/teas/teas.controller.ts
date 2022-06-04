@@ -33,22 +33,22 @@ export class TeasController {
   #########
   */
 
-  //http://localhost:3000/teas
+  //http://localhost:3004/teas
   //or
-  //http://localhost:3000/teas?limit=10&offset=100
+  //http://localhost:3004/teas?limit=10&offset=100
   @Get()
   findAll(@Query() paginationQuery) {
     // const { limit, offset } = paginationQuery;
     return this.teasService.findAll();
   }
 
-  //http://localhost:3000/teas/flavors
+  //http://localhost:3004/teas/flavors
   @Get('flavors')
   flavors() {
     return 'This action returns all flavors';
   }
 
-  //http://localhost:3000/teas/255(any number here)
+  //http://localhost:3004/teas/255(any number here)
   // ' : ' is refers to dynamic praters
   //here we extracting dynamic parameter called id
   @Get(':id')
@@ -66,7 +66,7 @@ export class TeasController {
   ##########
   */
 
-  //http://localhost:3000/teas
+  //http://localhost:3004/teas
   @Post()
   create(@Body() createTeaDto: CreateTeaDto) {
     return this.teasService.create(createTeaDto);
@@ -88,7 +88,7 @@ export class TeasController {
   2-Patch:modify the resource brashly, allowing us to update single prop of the resource 
   */
 
-  //http://localhost:3000/teas/255(any number here)
+  //http://localhost:3004/teas/255(any number here)
   @Patch(':id')
   // update(@Param('id') id: string "too indicated what entity to update",
   //@Body() body "the updating it self === the new values " )
@@ -102,7 +102,7 @@ export class TeasController {
   ############
   */
 
-  //http://localhost:3000/teas/255(any number here)
+  //http://localhost:3004/teas/255(any number here)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.teasService.remove(id);

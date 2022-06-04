@@ -14,11 +14,20 @@ export class TeasService {
   ) {}
 
   findAll() {
-    return this.teaRepository.find();
+    return this.teaRepository.find({
+      /*relations: relations needs to be loaded with the main entity.
+       Sub-relations can also be loaded (shorthand for join and leftJoinAndSelect) */
+      relations: { flavors: true },
+    });
   }
 
   async findOne(id: string) {
-    const tea = await this.teaRepository.findOne(id);
+    const tea = await this.teaRepository.findOne({
+      relations: { flavors: true },
+      where: {
+        id: +id,
+      },
+    });
 
     //send error when use try to reach id doesn't exist
     if (!tea) {
@@ -45,7 +54,11 @@ export class TeasService {
   }
 
   async remove(id: string) {
-    const teaIndex = await this.teaRepository.findOne(id);
+    const teaIndex = await this.teaRepository.findOne({
+      where: {
+        id: +id,
+      },
+    });
     return this.teaRepository.remove(teaIndex);
   }
 }
