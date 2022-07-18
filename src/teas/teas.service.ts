@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
@@ -17,7 +18,22 @@ export class TeasService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     private readonly entityManager: EntityManager,
-  ) {}
+    /*💡 Optimal / Best-practice 💡
+
+  constructor(
+    @Inject(coffeesConfig.KEY)
+    private coffeesConfiguration: ConfigType<typeof coffeesConfig>, 
+  ) {
+   // Now strongly typed, and able to access properties via:
+     console.log(coffeesConfiguration.foo); 
+   }
+*/
+    private readonly configService: ConfigService,
+  ) {
+    /* Accessing process.env variables from ConfigService */
+    const databaseHost = this.configService.get<string>('DATABASE_HOST');
+    console.log(databaseHost);
+  }
 
   findAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
