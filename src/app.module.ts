@@ -5,6 +5,7 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TeasModule } from './teas/teas.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TeasModule } from './teas/teas.module';
     }),
     ConfigModule.forRoot(),
     TeasModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],
